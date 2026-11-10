@@ -5,7 +5,7 @@ Teacher requirements:
 -CHANGE EVERYTHING TO JAVA
 
 -reservation/cart hold rule. 
-    -timer if transaction is not completed quanitity will be made availble for other buyers
+    -timer if transaction is not completed quanitity will be made available for other buyers
 -seller/owner listing control
     -only the seller can edit listings
 
