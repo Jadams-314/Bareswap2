@@ -1,1 +1,10 @@
-read me
+Sprint 3
+
+Teacher requirements:
+
+-CHANGE EVERYTHING TO JAVA
+
+-reservation/cart hold rule. 
+    -timer if transaction is not completed quanitity will be made availble for other buyers
+-seller/owener listing control
+    -only the seller can edit listings
