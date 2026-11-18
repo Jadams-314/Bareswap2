@@ -16,3 +16,17 @@ Nana Database and image upload
 
 Justin New java frontend and server setup
 
+
+
+
+gradle
+
+can reuse database.java and database.initializer
+
+wrapper intead of server? run locally (need to solve for database acess from different computers)
+
+shopping cart logic:
+
+
+to start edit database through console.
+class that accesses and displays database dynamically.

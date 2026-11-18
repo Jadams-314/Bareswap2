@@ -1,0 +1,41 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.gradleup.shadow' version '9.6.1'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    runtimeOnly 'org.postgresql:postgresql:42.7.4'
+    runtimeOnly 'com.mysql:mysql-connector-j:9.1.0'
+    runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc:13.6.2.jre11'
+    runtimeOnly 'org.xerial:sqlite-jdbc:3.54.1.0'
+}
+
+shadowJar {
+    manifest {
+        attributes 'Main-Class': 'com.example.Main'
+    }
+    mergeServiceFiles()
+}
+application {
+
+    //change to buyer or seller application(temporary. will integratge both for final sprint)
+    //mainClass = 'BareSwapBuyer' 
+    mainClass = 'BareSwapSeller'
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'BareSwapSeller' // Match to choice above!!
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    } {
+        exclude 'META-INF/*.RSA', 'META-INF/*.SF', 'META-INF/*.DSA'
+    }
+}
