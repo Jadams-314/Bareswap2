@@ -17,20 +17,22 @@ dependencies {
 
 shadowJar {
     manifest {
-        attributes 'Main-Class': 'com.example.Main'
+        attributes 'Main-Class': 'Main'
     }
     mergeServiceFiles()
 }
+
 application {
 
     //change to buyer or seller application(temporary. will integratge both for final sprint)
     //mainClass = 'BareSwapBuyer' 
-    mainClass = 'BareSwapSeller'
+    //mainClass = 'BareSwapSeller'
+    mainClass = 'Main'
 }
 
 jar {
     manifest {
-        attributes 'Main-Class': 'BareSwapSeller' // Match to choice above!!
+        attributes 'Main-Class': 'Main' // Match to choice above!!
     }
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     from {

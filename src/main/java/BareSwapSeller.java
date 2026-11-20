@@ -35,9 +35,22 @@ public class BareSwapSeller {
         };
     }
 
-    private void createAndShowGUI() {
-        frame = new JFrame("Secure Marketplace with Images - Logged in as: " + currentUser);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//Constructor overloading
+public BareSwapSeller(String loggedInUser) {
+    this(); 
+    currentUser = loggedInUser;
+}
+
+//Builds the JFrame and puts buttons on the right side
+public void createAndShowGUI() {
+    frame = new JFrame("Secure Marketplace with Images - Logged in as: " + currentUser);
+    //DISPOSE instead of EXIT
+        //was exit before. exit closes the entire Java Virtual Machine
+        //dispse closes the window while keeping the main menu open
+        //so the user can swap between selling and buying
+    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
+    
+
         frame.setSize(800, 500);
         frame.setLocationRelativeTo(null);
 
@@ -125,7 +138,8 @@ public class BareSwapSeller {
             return false;
         }
     }
-
+    //Clears the table model, queries store and tags (you) on database
+    //listings that you own(can edit)
     private void refreshTableData() {
         tableModel.setRowCount(0);
         try (Connection conn = DriverManager.getConnection(DB_URL);
@@ -161,7 +175,8 @@ public class BareSwapSeller {
             JOptionPane.showMessageDialog(frame, "Error loading items: " + e.getMessage());
         }
     }
-
+    //Displays form for seller to list a new item
+    //Saves the input to SQLite db shop.db
     private void showSellDialog() {
         JPanel panel = new JPanel(new GridLayout(4, 2, 5, 5));
         JTextField nameF = new JTextField();
@@ -170,6 +185,9 @@ public class BareSwapSeller {
         JLabel imgLabel = new JLabel("No image chosen");
         JButton btnBrowse = new JButton("Choose Image File...");
         
+        //stringbuilder instead of string
+        //strings are immutable! stringbuilder lets you reference
+        //the constant string and change it
         final StringBuilder selectedPath = new StringBuilder();
 
         btnBrowse.addActionListener(e -> {
@@ -226,6 +244,10 @@ public class BareSwapSeller {
             return false;
         }
     }
+    // methods below Enforce ownerhship checks against currentUser before
+    //running UPDATE or DELETE SQL commands
+    //only owner can edit/delete listing
+    //This is for item editing. one below for delisting(DELETE)
     private void handleEditAction() {
     int id = getSelectedItemId();
     if (id == -1) return;
@@ -264,6 +286,7 @@ public class BareSwapSeller {
     }
 }
 
+//checks ownership against currentUser for item delisting
 private void handleDelistAction() {
     int id = getSelectedItemId();
     if (id == -1) return;

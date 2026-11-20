@@ -4,8 +4,10 @@ import java.awt.*;
 import java.io.File;
 import java.sql.*;
 
+//Constructor overload assign currentUser and defaults to Guest
 public class BareSwapBuyer {
     private static final String DB_URL = "jdbc:sqlite:shop.db";
+    private String currentUser = "Guest"; 
 
     private JFrame frame;
     private JTable itemTable;
@@ -13,12 +15,10 @@ public class BareSwapBuyer {
 
     public static void main(String[] args) {
         setupDatabase();
-        // Run UI safely on the Event Dispatch Thread (EDT)
         SwingUtilities.invokeLater(() -> new BareSwapBuyer().createAndShowGUI());
     }
 
     public BareSwapBuyer() {
-        // Construct table with an explicit Column Class for handling images natively
         tableModel = new DefaultTableModel(new String[]{"ID", "Image", "Item Name", "Description", "Price ($)", "Seller"}, 0) {
             @Override
             public Class<?> getColumnClass(int column) {
@@ -30,26 +30,38 @@ public class BareSwapBuyer {
         };
     }
 
-    private void createAndShowGUI() {
-        frame = new JFrame("Marketplace Buyer Terminal");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    
+    public BareSwapBuyer(String loggedInUser) {
+        this();
+        if (loggedInUser != null && !loggedInUser.isEmpty()) {
+            this.currentUser = loggedInUser;
+        }
+    }
+
+    //Builds the window with buttons on the right
+    public void createAndShowGUI() {
+        frame = new JFrame("Marketplace Buyer Terminal - Logged in as: " + currentUser);
+        
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
         frame.setSize(800, 450);
         frame.setLocationRelativeTo(null);
+        
 
-        // Center Inventory Grid View
+
+    
         itemTable = new JTable(tableModel);
-        itemTable.setRowHeight(65); // Give breathing room for item images
+        itemTable.setRowHeight(65); 
         JScrollPane scrollPane = new JScrollPane(itemTable);
         frame.add(scrollPane, BorderLayout.CENTER);
 
-        // Right Sidebar Actions Menu
+       
         JPanel sidebarPanel = new JPanel(new GridLayout(2, 1, 10, 15));
         sidebarPanel.setBorder(BorderFactory.createEmptyBorder(15, 10, 15, 10));
 
         JButton btnRefresh = new JButton("Refresh Browser");
         JButton btnBuy = new JButton("🛒 Buy Selected");
         
-        // Style the Buy Button visually
+        
         btnBuy.setBackground(new Color(40, 167, 69));
         btnBuy.setForeground(Color.WHITE);
         btnBuy.setFocusPainted(false);
@@ -59,26 +71,26 @@ public class BareSwapBuyer {
         sidebarPanel.add(btnBuy);
         frame.add(sidebarPanel, BorderLayout.EAST);
 
-        // Operational Event Hooks
+        
         btnRefresh.addActionListener(e -> refreshMarketData());
         btnBuy.addActionListener(e -> processPurchase());
 
-        // Launch initial item scan
+       
         refreshMarketData();
         frame.setVisible(true);
     }
-
+    //ensure store table exists in shop.db and show error if it does not exist
     private static void setupDatabase() {
-        // Initializes empty tables matching the SecureStore app schema if missing
+        
         try (Connection conn = DriverManager.getConnection(DB_URL); Statement stmt = conn.createStatement()) {
             stmt.execute("CREATE TABLE IF NOT EXISTS store (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, description TEXT, price REAL NOT NULL, seller_id TEXT NOT NULL, image_path TEXT)");
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Database Connection Error: " + e.getMessage());
         }
     }
-
+    clears the table and updates store after db changes
     private void refreshMarketData() {
-        tableModel.setRowCount(0); // Wipe out old array cache
+        tableModel.setRowCount(0); 
         
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement();
@@ -88,7 +100,7 @@ public class BareSwapBuyer {
                 String imgPath = rs.getString("image_path");
                 ImageIcon thumbnail = null;
 
-                // Safely search and display the image file
+                
                 if (imgPath != null && !imgPath.isEmpty()) {
                     File file = new File(imgPath);
                     if (file.exists()) {
@@ -111,7 +123,7 @@ public class BareSwapBuyer {
             JOptionPane.showMessageDialog(frame, "Error pulling marketplace data: " + e.getMessage());
         }
     }
-
+    //Validates row selection, confirms purchase and executes DELETE sql command
     private void processPurchase() {
         int selectedRow = itemTable.getSelectedRow();
         if (selectedRow == -1) {
@@ -119,7 +131,7 @@ public class BareSwapBuyer {
             return;
         }
 
-        // Target unique primary ID key from column 0
+        
         int itemId = (int) tableModel.getValueAt(selectedRow, 0);
         String itemName = (String) tableModel.getValueAt(selectedRow, 2);
 
@@ -131,6 +143,7 @@ public class BareSwapBuyer {
 
         
         try (Connection conn = DriverManager.getConnection(DB_URL);
+        //sql command in a try catch
              PreparedStatement pstmt = conn.prepareStatement("DELETE FROM store WHERE id = ?")) {
             
             pstmt.setInt(1, itemId);
