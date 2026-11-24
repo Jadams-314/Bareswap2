@@ -1,3 +1,26 @@
+
+O--The system shall authenticate users through the Java backend before allowing access to protected marketplace features. O
+O--The system shall allow authenticated students to create, edit, and remove their own product listings. O
+O--Each listing shall include at minimum a product name, description, price, quantity, seller, and image. O
+O--The system shall retrieve marketplace listings dynamically from the database rather than relying on hard-coded product data. O
+O--The website shall automatically reflect changes to listings after items are added, edited, removed, reserved, or purchased. O
+IP--The system shall allow students to search for products using a keyword or product name. (In Progress)
+IP--The system shall allow students to add available products to a shopping cart. (In Progress)
+IP--The shopping cart shall display selected products, quantities, individual prices, and the total purchase amount. (In Progress)
+X--The system shall temporarily reserve cart quantities and release them if checkout is not completed within the reservation period. X
+X--Before completing a purchase, the system shall verify that the buyer has sufficient account funds and that the requested quantity is still available. X
+X--After a successful purchase, the system shall deduct the purchase amount from the buyer’s account balance and update the item’s remaining quantity. X
+X--The system shall maintain a record of completed purchases so users can view previous transactions. X
+X--The system shall provide a functional chat or messaging feature that allows a buyer to communicate with the seller of a specific listing. X
+X--Messages shall identify the sender, receiver, associated listing, and time sent. X
+O--The system shall ensure that users cannot modify or delete another seller’s listing. O
+O--Uploaded or captured product images shall remain associated with the correct listing after the page or application is reloaded. O
+X--If an item becomes unavailable or its quantity changes while another user has it in their cart, the system shall prevent an invalid purchase and inform the buyer that the listing has changed.
+O--The system shall handle database, authentication, or checkout failures by displaying a clear error message rather than failing silently.
+O--The website shall provide consistent navigation, clearly labeled actions, and a layout that works across the marketplace, listing, cart, messaging, and account pages.
+IP--The final prototype shall integrate authentication, database-backed listings, shopping cart behavior, purchasing, messaging, image handling, and transaction history into one working marketplace flow.
+
+
 Sprint 3
 
 Teacher requirements:
