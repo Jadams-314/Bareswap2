@@ -88,7 +88,7 @@ public class BareSwapBuyer {
             JOptionPane.showMessageDialog(null, "Database Connection Error: " + e.getMessage());
         }
     }
-    clears the table and updates store after db changes
+    //clears the table and updates store after db changes
     private void refreshMarketData() {
         tableModel.setRowCount(0); 
         
