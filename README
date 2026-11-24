@@ -1,5 +1,6 @@
 x--setup github actions -Justin
 x-- wallet/currency -Nana
+x--change plain text passwords. hash/encrypt
 O--The system shall authenticate users through the Java backend before allowing access to protected marketplace features. 
 O--The system shall allow authenticated students to create, edit, and remove their own product listings. 
 O--Each listing shall include at minimum a product name, description, price, quantity, seller, and image. 
